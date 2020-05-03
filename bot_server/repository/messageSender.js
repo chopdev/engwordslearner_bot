@@ -2,6 +2,8 @@ const fetch = require("node-fetch");
 const config = require("../config/configData");
 
 class TelegramAPI {
+  static SEND_MESSAGE = "sendMessage";
+  static SET_WEBHOOK = "setWebhook";
 
   static async getData(operation) {
     try {

@@ -1,20 +1,19 @@
 const config = require("./config/configData");
 const {TelegramAPI} = require("./repository/messageSender");
 const { SendMessage } = require("./models/sendMessage");
+const { WordsService } = require("./service/WordsService");
 
-const url = `https://api.telegram.org/bot${config.token}/`;
-
+const service = new WordsService();
+service.sendTranslation(config.user_id, "withhold").catch((ex) => console.error(ex));
+//service.sendNextWord(config.user_id).catch((ex) => console.error(ex));
 
 /** 
  * Send endpoint url for getting updates from telegram
 */
-// request.getData(`setWebhook?url=${config.ngrok}/${config.token}/update`);
+//TelegramAPI.getData(`${TelegramAPI.SET_WEBHOOK}?url=${config.ngrok}/${config.token}/update`);
 
 
-/* request.postData("sendMessage", new SendMessage(config.user_id, "Hello!", {
-    inline_keyboard: [[{text: "Button label", callback_data: "callback"}]]
+/* TelegramAPI.postData(TelegramAPI.SEND_MESSAGE, new SendMessage(config.user_id, "<b>Translation:</b>\nsome text<b>\n\nExamples:</b>\nThe client’s name and address have been withheld for security reasons.", {
+    inline_keyboard: [[{text: "Button label", callback_data: "callback1"}]]
 })); */
 
-TelegramAPI.postData("sendMessage", new SendMessage(config.user_id, "Hello! \n New line", {
-    inline_keyboard: [[{text: "Button label", callback_data: "callback"}]]
-}));
