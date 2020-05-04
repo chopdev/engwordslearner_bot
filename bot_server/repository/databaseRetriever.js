@@ -1,18 +1,11 @@
 const config = require("../config/configData");
 const { Word } = require("../models/wordEntity");
-
+const { getWordsFromFile } = require("../parser/parser");
 
 class DbRepository {
 
     constructor() {
-        let words = [
-            new Word("staffing", "набор персонала"),
-            new Word("errand", "поручение", "I’m stepping out to run some errands"),
-            new Word("withhold", "умалчивать, скрывать", ['Has the government been withholding crucial information?',
-                'The client’s name and address have been withheld for security reasons.']),
-            new Word("exempt", "освобождать", ['goods exempt from this tax include books and children’s closes', 
-                'Pregnant women are exempt from dental charges by the law.'])
-        ];
+        let words = getWordsFromFile();
 
         this.keys = [];
         this.wordsMap = new Map();
