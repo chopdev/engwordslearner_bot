@@ -13,6 +13,7 @@
     "fs": "0.0.1-security",
     "http": "0.0.1-security",
     "node-fetch": "^2.6.0",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "https": "^1.0.0"
   }
 }

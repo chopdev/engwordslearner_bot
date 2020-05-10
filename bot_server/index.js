@@ -1,10 +1,17 @@
 const config = require("./config/configData");
-var express = require('express');
+const https = require('https');
+const fs = require('fs');
+const express = require('express');
 const { WordsService } = require("./service/WordsService");
 
 let service = new WordsService();
-var app = express();
+let app = express();
 app.use(express.json());
+
+const options = {
+    key: fs.readFileSync(__dirname + '/config/ENG_BOT_PRIVATE.key', 'utf8'),
+    cert: fs.readFileSync(__dirname + '/config/ENG_BOT_PUBLIC.pem', 'utf8'),
+};
 
 app.get('/', function (req, res) {
     res.send('Ok')
@@ -40,4 +47,7 @@ app.post(`/${config.token}/update`, async function (req, res) {
 })
 
 
-app.listen(config.port, () => console.log(`listening at http://localhost:${config.port}`))
+//app.listen(config.port, () => console.log(`listening at http://localhost:${config.port}`))
+
+let server = https.createServer(options, app).listen(config.port, 
+    () => console.log(`listening at http://localhost:${config.port}`));
