@@ -1,0 +1,80 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+# https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/gettingstarted.templatebasics.html
+Resources:
+
+  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpc.html
+  wordsBotVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.10.0.0/16
+      EnableDnsSupport: 'true'
+      EnableDnsHostnames: 'true'
+      InstanceTenancy: default
+      Tags:
+        - Key: "context"
+          Value: "words_bot"
+
+  # https://aws.amazon.com/premiumsupport/knowledge-center/create-attach-igw-vpc/
+  wordsBotInternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: "context"
+          Value: "words_bot"
+  
+  wordsBotAttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref wordsBotVPC
+      InternetGatewayId: !Ref wordsBotInternetGateway
+
+  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet.html
+  wordsBotPublicSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref wordsBotVPC
+      CidrBlock: 10.10.1.0/24
+      MapPublicIpOnLaunch: "true"
+      Tags:
+        - Key: "context"
+          Value: "words_bot"
+        - Key: "subnet"
+          Value: "public"
+
+  wordsBotPrivateSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref wordsBotVPC
+      CidrBlock: 10.10.2.0/24
+      MapPublicIpOnLaunch: "false"
+      Tags:
+        - Key: "context"
+          Value: "words_bot"
+        - Key: "subnet"
+          Value: "private"
+
+  # https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html
+  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-route-table.html
+  wordsBotPublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref wordsBotVPC
+      Tags:
+        - Key: "context"
+          Value: "words_bot"
+        - Key: "subnet"
+          Value: "public"
+
+  wordsBotPublicRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref wordsBotPublicSubnet
+      RouteTableId: !Ref wordsBotPublicRouteTable
+
+  wordsBotInternetGatewayRoute:
+    Type: AWS::EC2::Route
+    Properties:
+       RouteTableId: !Ref wordsBotPublicRouteTable
+       DestinationCidrBlock: 0.0.0.0/0
+       GatewayId: !Ref wordsBotInternetGateway
