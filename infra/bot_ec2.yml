@@ -1,0 +1,62 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+# https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-security-group.html
+
+Parameters:
+  Ec2KeyPairParam:
+    Type: String
+    Default: "test-bot-keypair"
+  LatestAmiId:
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
+
+Resources:
+  wordsBotSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    DeletionPolicy: "Delete"
+    Properties: 
+      GroupDescription: "Eng words bot EC2 firewall"
+      GroupName: "wordsBot-sg-1"
+      VpcId: !ImportValue wordsBotVPC
+      SecurityGroupEgress: 
+        - IpProtocol: "tcp"
+          CidrIp: 0.0.0.0/0
+          FromPort: 0
+          ToPort: 65535
+      SecurityGroupIngress: 
+        - IpProtocol: "tcp"
+          CidrIp: 0.0.0.0/0
+          FromPort: 22
+          ToPort: 22
+        - IpProtocol: "tcp"
+          CidrIp: 0.0.0.0/0
+          FromPort: 8443
+          ToPort: 8443
+        - IpProtocol: "tcp"
+          CidrIp: 0.0.0.0/0
+          FromPort: 443
+          ToPort: 443
+      Tags:
+        - Key: "context"
+          Value: "words_bot"
+  
+
+  wordsBotEc2Instance: 
+    Type: AWS::EC2::Instance
+    DeletionPolicy: "Delete"
+    Properties:
+      InstanceType: "t2.micro"
+      SecurityGroupIds:
+        - !Ref wordsBotSecurityGroup
+      SubnetId: !ImportValue wordsBotPublicSubnet
+      Monitoring: "false"
+      KeyName: !Ref Ec2KeyPairParam
+      ImageId: !Ref LatestAmiId
+      Tags:
+        - Key: "context"
+          Value: "words_bot"
+
+
+Outputs:
+  BotEc2DnsName:
+    Value: !GetAtt wordsBotEc2Instance.PublicDnsName

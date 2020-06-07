@@ -78,3 +78,19 @@ Resources:
        RouteTableId: !Ref wordsBotPublicRouteTable
        DestinationCidrBlock: 0.0.0.0/0
        GatewayId: !Ref wordsBotInternetGateway
+
+  
+
+Outputs:
+  BotVpcId:
+    Value: !Ref wordsBotVPC
+    Export:
+      Name: "wordsBotVPC"
+  BotPublicSubnet:
+    Value: !Ref wordsBotPublicSubnet
+    Export:
+      Name: "wordsBotPublicSubnet"
+  BotPrivateSubnet:
+    Value: !Ref wordsBotPrivateSubnet
+    Export: 
+      Name: "wordsBotPrivateSubnet"

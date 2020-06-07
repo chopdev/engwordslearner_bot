@@ -1,6 +1,7 @@
 const fetch = require("node-fetch");
 const config = require("../config/configData");
 const request = require("request");
+const telegram_url = `https://api.telegram.org/bot${config.token}/`;
 
 class TelegramAPI {
   static SEND_MESSAGE = "sendMessage";
@@ -9,7 +10,7 @@ class TelegramAPI {
 
   static async getData(operation) {
     try {
-      const response = await fetch(config.telegram_url + operation);
+      const response = await fetch(telegram_url + operation);
       const json = await response.json();
       console.log(json);
     } catch (error) {
@@ -19,7 +20,7 @@ class TelegramAPI {
 
   static async postData(operation, data = {}) {
     try {
-      const response = await fetch(config.telegram_url + operation, {
+      const response = await fetch(telegram_url + operation, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -34,7 +35,7 @@ class TelegramAPI {
   }
 
   static postFormData(operation, formData = {}) {
-    request.post({url: config.telegram_url + operation, formData: formData}, function (err, httpResponse, body) {
+    request.post({url: telegram_url + operation, formData: formData}, function (err, httpResponse, body) {
       if (err) {
         return console.error('upload failed:', err);
       }
