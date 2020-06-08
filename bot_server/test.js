@@ -5,16 +5,6 @@ const { WordsService } = require("./service/WordsService");
 const fs = require('fs');
 
 
-/** 
- * Send endpoint url for getting updates from telegram
-*/
-//TelegramAPI.getData(`${TelegramAPI.SET_WEBHOOK}?url=${config.ec2}/${config.token}/update&certificate=${cert}`);
-
-TelegramAPI.postFormData(`${TelegramAPI.SET_WEBHOOK}?url=${config.ec2}/${config.token}/update`, {
-    certificate: fs.createReadStream(__dirname + '/config/ENG_BOT_PUBLIC.pem')
-});
-
-
 
 /** 
  * Send test message
