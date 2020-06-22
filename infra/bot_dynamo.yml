@@ -1,0 +1,33 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Resources:
+
+  wordsBotDynamodb:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: "Words"
+      BillingMode: "PAY_PER_REQUEST"
+      AttributeDefinitions:
+        - AttributeName: "word"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "word"
+          KeyType: "HASH"
+      Tags:
+        - Key: "context"
+          Value: "words_bot"
+
+
+  wordsBotVPCEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      PolicyDocument: '{
+        "Statement":[{
+          "Action": "*",
+          "Effect": "Allow",
+          "Resource": "*",
+          "Principal": "*"
+        }]
+      }'
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.dynamodb
+      VpcId: !ImportValue wordsBotVPC
