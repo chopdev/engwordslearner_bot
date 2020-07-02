@@ -3,8 +3,12 @@ const https = require('https');
 const fs = require('fs');
 const express = require('express');
 const { WordsService } = require("./service/WordsService");
+const { DbRepository } = require("./repository/databaseRetriever");
 
-let service = new WordsService();
+const dbRepository = new DbRepository();
+dbRepository.init().catch(ex => console.error(ex));
+
+let service = new WordsService(dbRepository);
 let app = express();
 app.use(express.json());
 

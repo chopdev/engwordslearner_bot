@@ -1,13 +1,12 @@
 const { Word } = require("../models/wordEntity");
-const { DbRepository } = require("../repository/databaseRetriever");
 const { TelegramAPI } = require("../repository/messageSender");
 const { SendMessage } = require("../models/sendMessage");
 
 class WordsService {
     SHOW_NEXT = "#^#show_next@^@";
 
-    constructor() {
-        this.repository = new DbRepository(); 
+    constructor(dbRepository) {
+        this.repository = dbRepository;
     }
 
     async sendTranslation(fromUserId, word) {
