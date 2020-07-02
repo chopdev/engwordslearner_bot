@@ -31,7 +31,7 @@ class DbRepository {
         this.users.add(id);
     }
 
-    getRandomWord() {
+    async getRandomWord() {
         const rand = Math.round(Math.random() * (this.keys.length - 1));
         return this.getWordForKey(this.keys[rand]);
     }

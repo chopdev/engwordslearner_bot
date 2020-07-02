@@ -15,7 +15,7 @@ class WordsService {
         }
 
         this.repository.saveUser(fromUserId);
-        const wordEntity = this.repository.getWordForKey(word);
+        const wordEntity = await this.repository.getWordForKey(word);
 
         TelegramAPI.postData(TelegramAPI.SEND_MESSAGE, new SendMessage(fromUserId, this.getTranslationText(wordEntity), {
             inline_keyboard: [[{text: "Show next", callback_data: this.SHOW_NEXT}]]
@@ -27,7 +27,7 @@ class WordsService {
             throw new Error(`sendNextWord invalid arguments - userId: ${userId}`);
         }
 
-        const wordEntity = this.repository.getRandomWord();
+        const wordEntity = await this.repository.getRandomWord();
         TelegramAPI.postData(TelegramAPI.SEND_MESSAGE, new SendMessage(userId, `<b>Translation:</b>\n${wordEntity.translations}`, {
             inline_keyboard: [[{text: "Show the word", callback_data: wordEntity.eng}]]
         }));

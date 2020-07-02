@@ -20,12 +20,11 @@ const { Word } = require("./models/wordEntity");
 ;; (async () => {
 
     const repo = new DbRepository();
+    const serv = new WordsService(repo);
     //await repo.init();
     
-    repo.getWordForKey("beyond").then(res => 
-        console.log(res)
-    );
-  
+    const word = await repo.getWordForKey("beyond");
+    console.log(serv.getTranslationText())
 })();
 
 
