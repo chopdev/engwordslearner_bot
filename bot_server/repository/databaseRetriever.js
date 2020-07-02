@@ -76,7 +76,7 @@ class DbRepository {
                 throw new Error(`Failed to find key in ddb: ${eng}`)
             }
             const flat = AWS.DynamoDB.Converter.unmarshall(res.Item);
-            return flat;
+            return new Word(flat.word, flat.translations, flat.examples);
         } catch (ex) {
             console.error("Failed to retrieve word from DDB", eng, ex)
             throw ex;

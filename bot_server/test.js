@@ -17,28 +17,23 @@ const { Word } = require("./models/wordEntity");
 
 
 
-/* ;; (async () => {
+;; (async () => {
 
     const repo = new DbRepository();
-    await repo.init();
+    //await repo.init();
     
-
-    repo.getRandomWord().then(res => 
-        console.log(res)
-    );
-
-    repo.getRandomWord().then(res => 
+    repo.getWordForKey("beyond").then(res => 
         console.log(res)
     );
   
-})(); */
+})();
 
 
 
-const repo = new DbRepository();
+/* const repo = new DbRepository();
 const words = getWordsFromFile();
 for(const word of words) {
 repo.saveWord(word, config.user_id);
-}
+} */
 
 
