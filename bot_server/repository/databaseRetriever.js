@@ -1,7 +1,6 @@
 const config = require("../config/configData");
 const AWS = require('aws-sdk');
 const { Word } = require("../models/wordEntity");
-const { getWordsFromFile } = require("../parser/parser");
 
 class DbRepository {
 
@@ -76,7 +75,7 @@ class DbRepository {
                 throw new Error(`Failed to find key in ddb: ${eng}`)
             }
             const flat = AWS.DynamoDB.Converter.unmarshall(res.Item);
-            return new Word(flat.word, flat.translations, flat.examples);
+            return new Word(flat.word, flat.translations, flat.examples, flat.synonyms);
         } catch (ex) {
             console.error("Failed to retrieve word from DDB", eng, ex)
             throw ex;
@@ -89,6 +88,7 @@ class DbRepository {
             const entity = AWS.DynamoDB.Converter.marshall({
                 word: word.eng,
                 translations: word._translations,
+                synonyms: word._synonyms,
                 examples: word._examples,
                 userId: userId + "",
                 date: date.toISOString()

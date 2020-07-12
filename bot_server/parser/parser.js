@@ -1,11 +1,10 @@
 const { Word } = require("../models/wordEntity");
-let fs = require('fs'),
-    path = require('path'),
-    filePath = path.join(__dirname, 'WORDS.txt');
+const fs = require('fs');
+const path = require('path');
 
 const BIG_DASH = '—', SMALL_DASH = '-';
 
-function getWordsFromFile() {
+function getWordsFromFile(filePath = path.join(__dirname, 'WORDS.txt')) {
     let wordEntities = [];
 
     const data = fs.readFileSync(filePath, { encoding: 'utf-8' });

@@ -35,15 +35,23 @@ class WordsService {
 
     getTranslationText(wordEntity) {
         const word = `<b>Word:</b>\n${wordEntity.eng}`;
+        const synonyms = `<b>Synonyms:</b>\n${wordEntity.synonyms}`;
         const translations = `<b>Translation:</b>\n${wordEntity.translations}`;
         const examples = `<b>Examples:</b>\n${wordEntity.examples}`;
         const translateLink = `<a href="https://translate.google.com/?hl=ru#view=home&op=translate&sl=en&tl=ru&text=${wordEntity.eng}">Google translate</a>`;
         const dictionaryLink = `<a href="https://www.dictionary.com/browse/${wordEntity.eng}">www.dictionary.com</a>`;
+        
+        const messageArr = [word, translations, translateLink, dictionaryLink]
+        
         if (wordEntity.examples) {
-            return [word, translations, examples, translateLink, dictionaryLink].join('\n\n');
+            messageArr.splice(2, 0, examples);
+        }
+
+        if (wordEntity.synonyms) {
+            messageArr.splice(2, 0, synonyms);
         }
         
-        return [word, translations, translateLink, dictionaryLink].join('\n\n');
+        return messageArr.join('\n\n');
     }
 }
 

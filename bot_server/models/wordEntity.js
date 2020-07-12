@@ -1,5 +1,5 @@
 class Word {
-    constructor(eng, translations, examples) {
+    constructor(eng, translations, examples, synonyms) {
         if (eng == null || eng == '') {
             throw new Error('Word cannot be empty');
         }
@@ -10,6 +10,7 @@ class Word {
         this._eng = eng;
         this._translations = translations;
         this._examples = examples;
+        this._synonyms = synonyms;
     }
 
     get eng() {
@@ -34,6 +35,18 @@ class Word {
         }
 
         return this._examples;
+    }
+
+    get synonyms() {
+        if (this._synonyms == null) {
+            return '';
+        }
+
+        if (Array.isArray(this._synonyms)) {
+            return this._synonyms.join(', ');
+        }
+
+        return this._synonyms;
     }
 }
 

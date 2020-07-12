@@ -16,15 +16,14 @@ const { Word } = require("./models/wordEntity");
 })); */
 
 
-
 ;; (async () => {
 
-    const repo = new DbRepository();
-    const serv = new WordsService(repo);
+    //const repo = new DbRepository();
+    //const serv = new WordsService(repo);
     //await repo.init();
     
-    const word = await repo.getWordForKey("beyond");
-    console.log(serv.getTranslationText())
+    //const word = await repo.getWordForKey("beyond");
+    //console.log(serv.getTranslationText())
 })();
 
 
