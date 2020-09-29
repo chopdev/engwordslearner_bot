@@ -1,31 +1,19 @@
-const config = require("./config/configData");
-const https = require('https');
-const fs = require('fs');
-const express = require('express');
+const config = require("../config/configData");
+
 const { WordsService } = require("./service/WordsService");
 const { DbRepository } = require("./repository/databaseRetriever");
 
 const dbRepository = new DbRepository();
-dbRepository.init().catch(ex => console.error(ex));
-
 let service = new WordsService(dbRepository);
-let app = express();
-app.use(express.json());
 
-const options = {
-    key: fs.readFileSync(__dirname + '/config/ENG_BOT_PRIVATE.key', 'utf8'),
-    cert: fs.readFileSync(__dirname + '/config/ENG_BOT_PUBLIC.pem', 'utf8'),
-};
-
-app.get('/', function (req, res) {
-    res.send('Ok')
-})
 
 /**
- * Endpoint that listens to updates from telegram servers
+ * Lambda that listens to updates from telegram servers 
+ * with the help of aws API Gateway
  * URL of that endpoint is set by 'setWebhook' telegram api
  */
-app.post(`/${config.token}/update`, async function (req, res) {
+exports.handler = async (event) => {
+    
     let body = req.body;
     if (!body) {
         res.send('Ok');
@@ -48,10 +36,4 @@ app.post(`/${config.token}/update`, async function (req, res) {
     }
     
     res.send('Ok')
-})
-
-
-//app.listen(config.port, () => console.log(`listening at http://localhost:${config.port}`))
-
-let server = https.createServer(options, app).listen(config.port, 
-    () => console.log(`listening at http://localhost:${config.port}`));
+};

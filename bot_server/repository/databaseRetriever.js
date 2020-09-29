@@ -8,33 +8,10 @@ class DbRepository {
         AWS.config.getCredentials(err => {
             if (err) console.error("Failed to get aws credentials", err);
         });
-        AWS.config.update({region: "us-east-1"});
+        AWS.config.update({region: config.aws.region});
         this.ddbClient = new AWS.DynamoDB();
     }
-
-    async init() {
-        this.keys = await this.getAllKeys();
-
-        this.users = new Set();
-        this.users.add(config.user_id);
-    }
-
-    getAllUsers() {
-        return this.users;
-    }
-
-    saveUser(id) {
-        if (Number.isNaN(id)) {
-            throw new Error(`Invalid chat id number: ${id}`)
-        }
-        this.users.add(id);
-    }
-
-    async getRandomWord() {
-        const rand = Math.round(Math.random() * (this.keys.length - 1));
-        return this.getWordForKey(this.keys[rand]);
-    }
-
+    
     async getAllKeys() {
         let lastEvalKey = null;
         let keys = [];

@@ -5,8 +5,9 @@ const { SendMessage } = require("../models/sendMessage");
 class WordsService {
     SHOW_NEXT = "#^#show_next@^@";
 
-    constructor(dbRepository) {
+    constructor(dbRepository, queueRepository) {
         this.repository = dbRepository;
+        this.queueRepository = queueRepository;
     }
 
     async sendTranslation(fromUserId, word) {
@@ -14,7 +15,6 @@ class WordsService {
             throw new Error(`getTranslation invalid arguments - fromUserId: ${fromUserId}; word: ${word}`);
         }
 
-        this.repository.saveUser(fromUserId);
         const wordEntity = await this.repository.getWordForKey(word);
 
         TelegramAPI.postData(TelegramAPI.SEND_MESSAGE, new SendMessage(fromUserId, this.getTranslationText(wordEntity), {
@@ -27,7 +27,10 @@ class WordsService {
             throw new Error(`sendNextWord invalid arguments - userId: ${userId}`);
         }
 
-        const wordEntity = await this.repository.getRandomWord();
+        const wordKey = await this.queueRepository.getNextWord();
+        const wordEntity = await this.repository.getWordForKey(wordKey);
+        await this.queueRepository.addWord(wordKey); // add key back into the queue
+
         TelegramAPI.postData(TelegramAPI.SEND_MESSAGE, new SendMessage(userId, `<b>Translation:</b>\n${wordEntity.translations}`, {
             inline_keyboard: [[{text: "Show the word", callback_data: wordEntity.eng}]]
         }));

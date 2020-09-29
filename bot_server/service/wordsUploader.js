@@ -4,7 +4,7 @@ const { DbRepository } = require("../repository/databaseRetriever");
 const config = require("../config/configData");
 
 
-//const words = getWordsFromExcel('/tmp/yanilov_words_1.xlsx');
+const words = getWordsFromExcel('/tmp/yanilov_words_1.xlsx');
 //const words = getWordsFromFile();
 
 const repo = new DbRepository();
