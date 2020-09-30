@@ -1,22 +1,24 @@
-const config = require("../config/configData");
-
 const { WordsService } = require("./service/WordsService");
 const { DbRepository } = require("./repository/databaseRetriever");
+const { QueueRepository } = require("./repository/queueRepository");
+const config = require("./config/configData");
+const fetch = require("node-fetch");
 
 const dbRepository = new DbRepository();
-let service = new WordsService(dbRepository);
-
+const queueRepository = new QueueRepository();
+let service = new WordsService(dbRepository, queueRepository);
 
 /**
  * Lambda that listens to updates from telegram servers 
  * with the help of aws API Gateway
  * URL of that endpoint is set by 'setWebhook' telegram api
  */
-exports.handler = async (event) => {
+exports.handler = async (event, context) => {
     
-    let body = req.body;
+    let body = JSON.parse(event.body);
+
     if (!body) {
-        res.send('Ok');
+        console.warn("Body not found");
         return;
     }
 
@@ -34,6 +36,8 @@ exports.handler = async (event) => {
     catch(ex) {
         console.error(ex);
     }
-    
-    res.send('Ok')
-};
+}
+
+async function sendToUser(obj) {
+    const response = await fetch(`https://api.telegram.org/bot${config.token}/sendMessage?chat_id=${config.user_id}&text=${JSON.stringify(obj)}`);
+}

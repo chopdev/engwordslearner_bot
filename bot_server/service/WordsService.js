@@ -17,7 +17,7 @@ class WordsService {
 
         const wordEntity = await this.repository.getWordForKey(word);
 
-        TelegramAPI.postData(TelegramAPI.SEND_MESSAGE, new SendMessage(fromUserId, this.getTranslationText(wordEntity), {
+        await TelegramAPI.postData(TelegramAPI.SEND_MESSAGE, new SendMessage(fromUserId, this.getTranslationText(wordEntity), {
             inline_keyboard: [[{text: "Show next", callback_data: this.SHOW_NEXT}]]
         }));
     }
@@ -31,7 +31,7 @@ class WordsService {
         const wordEntity = await this.repository.getWordForKey(wordKey);
         await this.queueRepository.addWord(wordKey); // add key back into the queue
 
-        TelegramAPI.postData(TelegramAPI.SEND_MESSAGE, new SendMessage(userId, `<b>Translation:</b>\n${wordEntity.translations}`, {
+        await TelegramAPI.postData(TelegramAPI.SEND_MESSAGE, new SendMessage(userId, `<b>Translation:</b>\n${wordEntity.translations}`, {
             inline_keyboard: [[{text: "Show the word", callback_data: wordEntity.eng}]]
         }));
     }
