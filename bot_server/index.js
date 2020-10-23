@@ -19,7 +19,7 @@ exports.handler = async (event, context) => {
 
     if (!body) {
         console.warn("Body not found");
-        return;
+        return false;
     }
 
     try {
@@ -36,6 +36,9 @@ exports.handler = async (event, context) => {
     catch(ex) {
         console.error(ex);
     }
+
+    // important to return successful result, cause telegram will re-make the query
+    return "Ok";
 }
 
 async function sendToUser(obj) {

@@ -1,0 +1,7 @@
+api gateway connected to lambda
+
+lambda
+role to access sqs and dynamo
+
+sqs
+

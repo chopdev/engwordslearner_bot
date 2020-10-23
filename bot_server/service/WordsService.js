@@ -29,7 +29,6 @@ class WordsService {
 
         const wordKey = await this.queueRepository.getNextWord();
         const wordEntity = await this.repository.getWordForKey(wordKey);
-        await this.queueRepository.addWord(wordKey); // add key back into the queue
 
         await TelegramAPI.postData(TelegramAPI.SEND_MESSAGE, new SendMessage(userId, `<b>Translation:</b>\n${wordEntity.translations}`, {
             inline_keyboard: [[{text: "Show the word", callback_data: wordEntity.eng}]]

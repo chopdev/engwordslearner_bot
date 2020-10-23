@@ -36,32 +36,52 @@ class QueueRepository {
             QueueUrl: config.sqs_url
           };
  
-         await this.sqsClient.sendMessage(params).promise();
+        return this.sqsClient.sendMessage(params).promise();
     }
 
     /* 
-     *  Get word's eng key & remove it from the queue
+     *  Gets one SQS message
     */
-    async getNextWord() {
-        var params = {
+    async getOneMessage() {
+        const params = {
             QueueUrl: config.sqs_url,
             MaxNumberOfMessages: '1',
+            VisibilityTimeout: 40
         };
 
         let response = await this.sqsClient.receiveMessage(params).promise();
 
-        if (!response.Messages) {
-            return null;
+        if (!response.Messages || !response.Messages[0]) {
+            throw new Error(`[ERROR] Failed to receive next message`)
         }
 
+        return response.Messages[0];
+    }
+
+     /* 
+     *  Delete message with specific "ReceiptHandle"
+    */
+   async deleteMessage(receiptHandle) {
         var deleteParams = {
             QueueUrl: config.sqs_url,
-            ReceiptHandle: response.Messages[0].ReceiptHandle
+            ReceiptHandle: receiptHandle
         };
-              
-        await this.sqsClient.deleteMessage(deleteParams).promise();
-        
-        return response.Messages[0].Body;
+            
+        return this.sqsClient.deleteMessage(deleteParams).promise();
+    }
+
+    /* 
+     *  Get word's eng key & re-add it to the queue
+    */
+    async getNextWord() {
+        try {
+            const msg = await this.getOneMessage();
+            await this.deleteMessage(msg.ReceiptHandle);
+            await this.addWord(msg.Body);
+            return msg.Body;
+        } catch(ex) {
+            console.error(`[ERROR] Failed to get next word. ${ex}`);
+        }
     }
 }
 
