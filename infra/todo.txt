@@ -1,7 +1,16 @@
-api gateway connected to lambda
+1) api gateway connected to lambda
 
-lambda
-role to access sqs and dynamo
+2) "wordsBot-lambda" main lambda lambda
+3) role to access sqs and dynamo
 
-sqs
+4) "wordsBot-queueReload" lambda 
+ - Timeout  - 2 min 
+ - Role - the same as main
+ - Event Bridge trigger event with rate 13 days
+
+5) "WordsQueue" sqs 
+ - Message retention period - 14 days
+ - Visibility timeout  30 sec
+ - Max message size - 100 kb
+- DLQ - disabled
 

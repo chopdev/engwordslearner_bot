@@ -2,3 +2,4 @@ config
 ngrok
 node_modules
 launch.json
+dist

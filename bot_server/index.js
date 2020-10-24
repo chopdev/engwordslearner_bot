@@ -1,8 +1,7 @@
-const { WordsService } = require("./service/WordsService");
+const { WordsService } = require("./service/wordsService");
 const { DbRepository } = require("./repository/databaseRetriever");
 const { QueueRepository } = require("./repository/queueRepository");
 const config = require("./config/configData");
-const fetch = require("node-fetch");
 
 const dbRepository = new DbRepository();
 const queueRepository = new QueueRepository();
@@ -39,8 +38,4 @@ exports.handler = async (event, context) => {
 
     // important to return successful result, cause telegram will re-make the query
     return "Ok";
-}
-
-async function sendToUser(obj) {
-    const response = await fetch(`https://api.telegram.org/bot${config.token}/sendMessage?chat_id=${config.user_id}&text=${JSON.stringify(obj)}`);
 }

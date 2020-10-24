@@ -3,13 +3,13 @@ const { TelegramAPI } = require("../repository/messageSender");
 const { SendMessage } = require("../models/sendMessage");
 
 class WordsService {
-    SHOW_NEXT = "#^#show_next@^@";
 
     constructor(dbRepository, queueRepository) {
+        this.SHOW_NEXT = "#^#show_next@^@";
         this.repository = dbRepository;
         this.queueRepository = queueRepository;
     }
-
+    
     async sendTranslation(fromUserId, word) {
         if (fromUserId == null || word == null || word == '') {
             throw new Error(`getTranslation invalid arguments - fromUserId: ${fromUserId}; word: ${word}`);

@@ -1,16 +1,13 @@
-const { getWordsFromExcel } = require("../parser/excelParser");
-const { getWordsFromFile } = require("../parser/parser");
-const { QueueRepository } = require("../repository/queueRepository");
-const { DbRepository } = require("../repository/databaseRetriever");
-const config = require("../config/configData");
-const { Word } = require("../models/wordEntity");
+class QueueUploader {
+    constructor(dbRepository, queueRepository) {
+        this.repository = dbRepository;
+        this.queueRepository = queueRepository;
+    }
 
-const repo = new DbRepository();
-const queue = new QueueRepository();
-
-async function backfillQueue() {
-    const keys = await repo.getAllKeys();
-    await queue.backfillQueue(shuffleArray(keys));
+    async backfillQueue() {
+        const keys = await this.repository.getAllKeys();
+        await this.queueRepository.backfillQueue(shuffleArray(keys));
+    }
 }
 
 function shuffleArray(a) {
@@ -24,4 +21,4 @@ function shuffleArray(a) {
     return a;
 }
 
-backfillQueue().then(x => console.log(x));
+exports.QueueUploader = QueueUploader;

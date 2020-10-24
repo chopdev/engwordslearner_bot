@@ -4,16 +4,22 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --config webpack.config.js",
+    "update-queue": "webpack --config webpack.config.queue.js && cd ./dist/reloadQueue &&  zip reloadQueue.zip index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "aws-sdk": "^2.709.0",
+    "axios": "^0.21.0",
     "fs": "0.0.1-security",
-    "node-fetch": "^2.6.0",
     "path": "^0.12.7",
-    "request": "^2.88.2",
     "xlsx": "^0.16.3"
+  },
+  "devDependencies": {
+    "webpack": "^5.2.0",
+    "webpack-cli": "^4.1.0",
+    "webpack-node-externals": "^2.5.2"
   }
 }

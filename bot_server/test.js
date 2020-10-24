@@ -1,7 +1,7 @@
 const config = require("./config/configData");
 const {TelegramAPI} = require("./repository/messageSender");
 const { SendMessage } = require("./models/sendMessage");
-const { WordsService } = require("./service/WordsService");
+const { WordsService } = require("./service/wordsService");
 const fs = require('fs');
 const { DbRepository } = require("./repository/databaseRetriever");
 const AWS = require('aws-sdk');

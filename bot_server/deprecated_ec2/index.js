@@ -2,7 +2,7 @@ const config = require("../config/configData");
 const https = require('https');
 const fs = require('fs');
 const express = require('express');
-const { WordsService } = require("../service/WordsService");
+const { WordsService } = require("../service/wordsService");
 const { DbRepository } = require("../repository/databaseRetriever");
 
 const dbRepository = new DbRepository();

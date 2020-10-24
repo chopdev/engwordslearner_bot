@@ -1,18 +1,17 @@
-const fetch = require("node-fetch");
 const config = require("../config/configData");
-const request = require("request");
 const telegram_url = `https://api.telegram.org/bot${config.token}/`;
+const axios = require('axios');
 
 class TelegramAPI {
-  static SEND_MESSAGE = "sendMessage";
-  static SET_WEBHOOK = "setWebhook";
-  static GET_WEBHOOK_INFO = "getWebhookInfo";
+
+  static async sendMessageToUser(userId, data) {
+    const textData = (typeof data === 'string') ? data : JSON.stringify(data);
+    await TelegramAPI.getData(`${TelegramAPI.SEND_MESSAGE}?chat_id=${userId}&text=${encodeURIComponent(textData)}`);
+  }
 
   static async getData(operation) {
     try {
-      const response = await fetch(telegram_url + operation);
-      const json = await response.json();
-      console.log(json);
+      const response = await axios.get(telegram_url + operation);
     } catch (error) {
       console.log(error);
     }
@@ -20,29 +19,23 @@ class TelegramAPI {
 
   static async postData(operation, data = {}) {
     try {
-      const response = await fetch(telegram_url + operation, {
+      const response = await axios({
         method: 'POST',
+        url: telegram_url + operation,
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(data)
+        data: data
       });
-      const json = await response.json();
-      console.log(json);
     } catch (error) {
       console.log(error);
     }
   }
-
-  static postFormData(operation, formData = {}) {
-    request.post({url: telegram_url + operation, formData: formData}, function (err, httpResponse, body) {
-      if (err) {
-        return console.error('upload failed:', err);
-      }
-      console.log(body);
-    });
-  }
-  
 }
+
+TelegramAPI.SEND_MESSAGE = "sendMessage";
+TelegramAPI.SET_WEBHOOK = "setWebhook";
+TelegramAPI.GET_WEBHOOK_INFO = "getWebhookInfo";
+
 
 exports.TelegramAPI = TelegramAPI;
