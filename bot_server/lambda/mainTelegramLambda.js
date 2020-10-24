@@ -1,7 +1,7 @@
-const { WordsService } = require("./service/wordsService");
-const { DbRepository } = require("./repository/databaseRetriever");
-const { QueueRepository } = require("./repository/queueRepository");
-const config = require("./config/configData");
+const { WordsService } = require("../service/wordsService");
+const { DbRepository } = require("../repository/databaseRetriever");
+const { QueueRepository } = require("../repository/queueRepository");
+const config = require("../config/configData");
 
 const dbRepository = new DbRepository();
 const queueRepository = new QueueRepository();
