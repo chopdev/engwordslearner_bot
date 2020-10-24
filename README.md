@@ -24,7 +24,7 @@ exports.aws = {
     region: "..."
 };
 ```
- * Build of the bundles is done by ```webpack```
+ * Build of the bundles is done by ```webpack```  
 ```package.json``` "scripts" contains commands to create ```.zip``` deployment packages of lambdas which are placed in ```dist``` folder
 
 ```
