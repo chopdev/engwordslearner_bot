@@ -9,6 +9,10 @@ const cyrillicPattern = /[а-яА-ЯЁё]/;
 function getWordsFromExcel(filePath = path.join(__dirname, '/tmp/WORDS.xlsx')) {
     
     const workbook = xlsx.readFile(filePath);
+    return readWorkBook(workbook);
+}
+
+function readWorkBook(workbook) {
     const sheet_name_list = workbook.SheetNames;
     const csvOptions = {
         FS: fieldSeparator,

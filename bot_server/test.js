@@ -4,9 +4,13 @@ const { SendMessage } = require("./models/sendMessage");
 const { WordsService } = require("./service/wordsService");
 const fs = require('fs');
 const { DbRepository } = require("./repository/databaseRetriever");
+const { QueueRepository } = require("./repository/queueRepository");
+const { WordsUploader } = require("./service/wordsUploader");
+const { FileService } = require("./service/fileService");
 const AWS = require('aws-sdk');
 const { getWordsFromFile } = require("./parser/parser");
 const { Word } = require("./models/wordEntity");
+const { getWordsFromExcel } = require("./parser/excelParser");
 
 /** 
  * Send test message
@@ -24,6 +28,15 @@ const { Word } = require("./models/wordEntity");
     
     //const word = await repo.getWordForKey("beyond");
     //console.log(serv.getTranslationText())
+
+    try {
+
+
+    } catch(er) {
+        console.error(er);
+    }
+    
+    
 })();
 
 
